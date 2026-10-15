@@ -79,6 +79,11 @@ if (contactForm) {
       fields.get('message')
     ].join('\n');
     window.location.href = `mailto:support@paypath.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (toast) {
+      toast.textContent = 'Your email app is opening with the message ready to review.';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4500);
+    }
   });
 }
 
@@ -99,6 +104,8 @@ if (authForm) {
         }, { once: true });
         return;
       }
+      window.location.href = 'login.html?registered=1';
+      return;
     }
 
     const role = authForm.elements.dashboardRole.value;
@@ -109,6 +116,11 @@ if (authForm) {
     }
     window.location.href = role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
   });
+}
+
+const registered = new URLSearchParams(window.location.search).get('registered');
+if (registered && document.getElementById('auth-status')) {
+  document.getElementById('auth-status').textContent = 'Registration complete. Log in to continue to your dashboard preview.';
 }
 
 document.querySelectorAll('[data-logout]').forEach((link) => {
